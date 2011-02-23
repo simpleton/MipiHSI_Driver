@@ -1,0 +1,21 @@
+
+
+386_OBJECTS=\
+ $(OBJ_PATH)\$O\driver.obj \
+ $(OBJ_PATH)\$O\device.obj \
+ $(OBJ_PATH)\$O\queue.obj \
+ $(OBJ_PATH)\$O\hsi_usb_hw.obj \
+ $(OBJ_PATH)\$O\hsi_firmware.obj \
+ $(OBJ_PATH)\$O\hsi_usb_config.obj \
+
+
+
+
+
+# lowercased
+BASEDIR=c:\winddk\7600.16385.1
+OBJECT_ROOT=c:\winddk\7600.16385.1
+MAKEDIR_LOWERCASE=c:\users\sunsheng\desktop\v0.3mipi_driver
+OBJ_PATH=c:\users\sunsheng\desktop\v0.3mipi_driver
+CONCURRENT_MIDL=0
+CONCURRENT_MANIFEST_BUILD=0

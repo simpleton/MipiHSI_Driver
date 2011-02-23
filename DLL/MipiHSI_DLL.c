@@ -1,0 +1,613 @@
+/*++
+
+
+Module Name:
+
+MipiHSI_DLL.C
+
+Abstract:
+
+the dynamic liberay for the MipiHSI_Bridge_device driver
+
+Environment:
+
+user mode only
+
+--*/
+
+
+#include <DriverSpecs.h>
+__user_code 
+
+#include <windows.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <process.h>
+#include "devioctl.h"
+#include "strsafe.h"
+
+#pragma warning(disable:4200)  //
+#pragma warning(disable:4201)  // nameless struct/union
+#pragma warning(disable:4214)  // bit field types other than int
+
+#include <setupapi.h>
+#include <basetyps.h>
+#include "usbdi.h"
+#include "public.h"
+
+#pragma warning(default:4200)
+#pragma warning(default:4201)
+#pragma warning(default:4214)
+
+#define WHILE(a) \
+	while(__pragma(warning(disable:4127)) a __pragma(warning(disable:4127)))
+
+
+int G_WriteLen = 0x100;         // #bytes to write
+int G_ReadLen = 0x100;          // #bytes to read
+
+
+
+#if defined(BUILT_IN_DDK)
+
+#define scanf_s scanf
+
+#endif
+//#define DEBUG_DATA 
+#define FIFO_LENGTH 0x1000
+#define CHANNEL 	16
+#define LOOP_LENGTH 0x30		
+#define MAX_DEVPATH_LENGTH 256
+
+struct _kfifo
+{
+	unsigned int in;
+	unsigned int out;
+	unsigned int size;
+	unsigned int data[FIFO_LENGTH];
+};
+
+
+unsigned char tmp_buf[0x1000];
+struct _kfifo Read_FIFO[CHANNEL];
+unsigned int   pinBuf[16][0x200];
+unsigned int   poutBuf[16][0x200];
+HANDLE 				 hEvent[16];
+unsigned int   loop_time;
+
+void fifo_out(
+	__in struct _kfifo *fifo, 
+	__in unsigned char *buf, 
+	__in __out unsigned int *length
+	);
+	
+BOOL
+	GetDevicePath(
+	IN  LPGUID InterfaceGuid,
+	__out_ecount(BufLen) PCHAR DevicePath,
+	__in size_t BufLen
+	)
+{
+	HDEVINFO HardwareDeviceInfo;
+	SP_DEVICE_INTERFACE_DATA DeviceInterfaceData;
+	PSP_DEVICE_INTERFACE_DETAIL_DATA DeviceInterfaceDetailData = NULL;
+	ULONG Length, RequiredLength = 0;
+	BOOL bResult;
+	HRESULT     hr;
+
+	HardwareDeviceInfo = SetupDiGetClassDevs(
+		InterfaceGuid,
+		NULL,
+		NULL,
+		(DIGCF_PRESENT | DIGCF_DEVICEINTERFACE));
+
+	if (HardwareDeviceInfo == INVALID_HANDLE_VALUE) {
+		printf("SetupDiGetClassDevs failed!\n");
+		return FALSE;
+	}
+
+	DeviceInterfaceData.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
+
+	bResult = SetupDiEnumDeviceInterfaces(HardwareDeviceInfo,
+		0,
+		InterfaceGuid,
+		0,
+		&DeviceInterfaceData);
+
+	if (bResult == FALSE) {
+
+		LPVOID lpMsgBuf;
+
+		if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+			FORMAT_MESSAGE_FROM_SYSTEM |
+			FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL,
+			GetLastError(),
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			(LPSTR) &lpMsgBuf,
+			0,
+			NULL
+			)) {
+
+				printf("SetupDiEnumDeviceInterfaces failed: %s", (LPSTR)lpMsgBuf);
+				LocalFree(lpMsgBuf);
+		}
+
+		SetupDiDestroyDeviceInfoList(HardwareDeviceInfo);
+		return FALSE;
+	}
+
+	SetupDiGetDeviceInterfaceDetail(
+		HardwareDeviceInfo,
+		&DeviceInterfaceData,
+		NULL,
+		0,
+		&RequiredLength,
+		NULL
+		);
+
+	DeviceInterfaceDetailData = (PSP_DEVICE_INTERFACE_DETAIL_DATA)
+		LocalAlloc(LMEM_FIXED, RequiredLength);
+
+	if (DeviceInterfaceDetailData == NULL) {
+		SetupDiDestroyDeviceInfoList(HardwareDeviceInfo);
+		printf("Failed to allocate memory.\n");
+		return FALSE;
+	}
+
+	DeviceInterfaceDetailData->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
+
+	Length = RequiredLength;
+
+	bResult = SetupDiGetDeviceInterfaceDetail(
+		HardwareDeviceInfo,
+		&DeviceInterfaceData,
+		DeviceInterfaceDetailData,
+		Length,
+		&RequiredLength,
+		NULL);
+
+	if (bResult == FALSE) {
+
+		LPVOID lpMsgBuf;
+
+		if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+			FORMAT_MESSAGE_FROM_SYSTEM |
+			FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL,
+			GetLastError(),
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			(LPSTR) &lpMsgBuf,
+			0,
+			NULL)) {
+
+				printf("Error in SetupDiGetDeviceInterfaceDetail: %s\n", (LPSTR)lpMsgBuf);
+				LocalFree(lpMsgBuf);
+		}
+
+		SetupDiDestroyDeviceInfoList(HardwareDeviceInfo);
+		LocalFree(DeviceInterfaceDetailData);
+		return FALSE;
+	}
+
+	hr = StringCchCopy(DevicePath,
+		BufLen,
+		DeviceInterfaceDetailData->DevicePath);
+	if (FAILED(hr)) {
+		SetupDiDestroyDeviceInfoList(HardwareDeviceInfo);
+		LocalFree(DeviceInterfaceDetailData);
+		return FALSE;
+	}
+
+	SetupDiDestroyDeviceInfoList(HardwareDeviceInfo);
+	LocalFree(DeviceInterfaceDetailData);
+
+	return TRUE;
+
+}
+
+
+HANDLE
+	Open_Device(
+	__in BOOL Synchronous
+	)
+
+	/*++
+	Routine Description:
+
+	Called by main() to open an instance of our device after obtaining its name
+
+	Arguments:
+
+	Synchronous - TRUE, if Device is to be opened for synchronous access.
+	FALSE, otherwise.
+
+	Return Value:
+
+	Device handle on success else INVALID_HANDLE_VALUE
+
+	--*/
+
+{
+	HANDLE hDev;
+	char completeDeviceName[MAX_DEVPATH_LENGTH];
+
+	if ( !GetDevicePath(
+		(LPGUID) &GUID_CLASS_MIPIHSI_USB,
+		completeDeviceName,
+		sizeof(completeDeviceName)) )
+	{
+		return  INVALID_HANDLE_VALUE;
+	}
+
+	printf("DeviceName = (%s)\n", completeDeviceName);
+
+	if(Synchronous) {
+		hDev = CreateFile(completeDeviceName,
+			GENERIC_WRITE | GENERIC_READ,
+			FILE_SHARE_WRITE | FILE_SHARE_READ,
+			NULL, // default security
+			OPEN_EXISTING,
+			FILE_ATTRIBUTE_NORMAL,
+			NULL);
+	} else {
+
+		hDev = CreateFile(completeDeviceName,
+			GENERIC_WRITE | GENERIC_READ,
+			FILE_SHARE_WRITE | FILE_SHARE_READ,
+			NULL, // default security
+			OPEN_EXISTING,
+			FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED,
+			NULL);
+	}
+
+	if (hDev == INVALID_HANDLE_VALUE) {
+		printf("Failed to open the device, error - %d", GetLastError());
+	} else {
+		printf("Opened the device successfully.\n");
+	}
+
+	return hDev;
+}
+
+void Close_Device(
+	HANDLE hDevice
+)
+{
+		if (hDevice != INVALID_HANDLE_VALUE) {
+			CloseHandle(hDevice);
+		}
+}
+int Send_Data(
+	__in HANDLE hDevice,
+	__in int channel,
+	__in unsigned char *buf,
+	__in int length
+	)
+{
+	int 		  ret;
+	unsigned char poutBuf[0x1000];
+	ULONG 	      nBytesWrite;
+	int i;
+	poutBuf[0] = 0xBE;
+	poutBuf[1] = 0xEF;
+	poutBuf[2] = channel & 0xF;
+	poutBuf[3] = length/4;
+	memcpy(poutBuf+4,buf,length);
+	
+#ifdef DEBUG_DATA
+	printf("\nWrite Buffer:    ");
+	for (i=0; i<length/4; ++i)
+		printf("%x ",((unsigned int*)buf)[i]);
+	printf("\n");
+#endif
+
+	ret = WriteFile(hDevice, poutBuf, length+4,  (PULONG) &nBytesWrite, NULL);
+	if(ret == 0) {
+		printf("WriteFile failed - error %d\n", GetLastError());
+		nBytesWrite = -1;
+	}
+	return nBytesWrite;
+	
+}
+int Read_Date(
+	__in int channel,
+	__out unsigned char *buf,
+	__in int length
+)
+{
+	unsigned int			nBytesRead;	
+	fifo_out(&(Read_FIFO[channel]), buf,&nBytesRead);
+	return nBytesRead;
+}
+
+
+
+
+
+
+int Set_Register(
+	__in HANDLE hDevice,
+	__in REG_STRUCT *pos_reg,
+	__in int num_reg
+	)
+{
+	int retValue;
+	ULONG nBytesRead;
+	retValue = DeviceIoControl( hDevice,
+							   IOCTL_MIPI_WRITE_REG,				   
+							   (unsigned char*)pos_reg,
+							   sizeof(REG_STRUCT)*num_reg,
+							   NULL,
+							   0,
+							   (PULONG) &nBytesRead,
+							   NULL);
+	if(retValue == FALSE) {
+			   printf("DeviceIoControl failed - error %d\n", GetLastError());
+	}
+	return retValue;
+}
+
+int Dump_Register(
+	__in  HANDLE hDevice,
+	__out unsigned char *regs,
+	__out int *reg_num
+	)
+{
+	int retval,nBytesRead,i;
+	retval = DeviceIoControl(hDevice,
+				   IOCTL_MIPI_DUMP_REG,				   
+				   NULL,
+				   0,
+				   (unsigned char*)regs,
+				   CONF_REGS,
+				   (PULONG) &nBytesRead,
+				   NULL);
+	if(retval == FALSE) {
+			   printf("DeviceIoControl failed - error %d\n", GetLastError());
+			   retval = 1;
+		}
+	*reg_num = nBytesRead;
+
+	for (i=0; i<nBytesRead; ++i)
+		printf("%02X ",regs[i]);
+
+	return retval;
+}
+
+int Get_Register(
+	__in  HANDLE hDevice,
+	__in  REG_STRUCT *pos_reg,
+	__out unsigned char *regs,
+	__in __out int *reg_num
+	)
+{
+	int retval,nBytesRead,i;
+	retval = DeviceIoControl(hDevice,
+			   IOCTL_MIPI_READ_REG,				   
+			   (unsigned char*)pos_reg,
+			   sizeof(REG_STRUCT)*(*reg_num),
+			   (unsigned char*)regs,
+			   sizeof(unsigned char)*(*reg_num),
+			   (PULONG) &nBytesRead,
+			   NULL);
+	if(retval == FALSE) {
+			   printf("DeviceIoControl failed - error %d\n", GetLastError());
+			   retval = 1;
+		}
+	*reg_num = nBytesRead;
+	
+	for (i=0; i<nBytesRead; ++i)
+		printf("Register Read %x \n",regs[i]);
+
+	return retval;
+}
+void init_fifo(struct _kfifo *fifo)
+{
+	fifo->in = 0;
+	fifo->out = 0;
+	fifo->size = FIFO_LENGTH;
+	memset(fifo->data, 0, sizeof(fifo->data));
+}
+
+void fifo_in(
+	__in struct _kfifo *fifo, 
+	__in unsigned char * buf, 
+	__in __out unsigned int *length
+	)
+{
+	unsigned int left_len,len;
+	
+	left_len = fifo->size - fifo->in + fifo->out;
+	if (*length > left_len){
+		fprintf(stderr, "ERROR: FIFO OVER FLOW\n");
+	}
+
+	*length = min(left_len, *length);
+
+	len = min(*length,fifo->size - (fifo->in & (fifo->size - 1)));
+	memcpy( fifo->data+fifo->in, buf, len);
+	memcpy( fifo->data, buf+len,  *length-len);
+
+	fifo->in += *length;
+
+}
+void fifo_out(
+	__in struct _kfifo *fifo, 
+	__in unsigned char *buf, 
+	__in __out unsigned int *length
+	)
+{
+	unsigned int data_len,len;
+	data_len = fifo->in - fifo->out;
+
+	*length = min(data_len, *length);
+
+	len = min(*length, fifo->size - (fifo->out & (fifo->size - 1)));
+	memcpy(buf, fifo->data+fifo->out,  len);
+	memcpy(buf+len, fifo->data,  *length - len);
+
+	fifo->out += *length;
+	
+}
+void __cdecl beginReadFunc( HANDLE hDevice )
+{
+	int retval,nBytesRead;
+	int i;
+	unsigned int channel,length,left_buffer;
+	
+#ifdef DEBUG_DATA	
+	printf("beginReadFunc");
+#endif
+
+	while (1){
+		retval = ReadFile(hDevice, tmp_buf, 0x100, (PULONG) &nBytesRead, NULL);	
+		
+		channel = tmp_buf[nBytesRead-2] & 0xF;
+		length	= tmp_buf[nBytesRead-1] & 0xFF;
+		
+#ifdef DEBUG_DATA
+		if (length )
+			printf("***Read*** %d %d\n",channel, length);
+		for (i=0; i<length; ++i)
+			printf("%x ",((unsigned int*)tmp_buf)[i]);
+#endif
+
+		length *= sizeof(unsigned int);
+		fifo_in(&(Read_FIFO[channel]), tmp_buf,&length);
+	}
+
+}
+
+void Start_Recieve(HANDLE hDevice)
+{
+	int i;
+	for (i=0; i<CHANNEL; ++i){
+		init_fifo(&(Read_FIFO[i]));
+	}
+	_beginthread(beginReadFunc,0,hDevice);
+}
+
+void __cdecl Thread_loop_Revice(void* channel)
+{
+	unsigned int date_len=0,i;
+	printf("Thread_loop_Revice Channel %d\n",(int)channel);
+	while (date_len < LOOP_LENGTH*4){		
+		date_len += Read_Date(channel,pinBuf[(int)channel],LOOP_LENGTH*4-date_len);
+		if (date_len > 0){
+			//printf("%d %d\n",(int)channel,date_len);
+		}
+		else
+			Sleep(10);
+	}
+	for (i=0; i<LOOP_LENGTH; ++i){
+		if (pinBuf[(int)channel][i] != poutBuf[(int)channel][i]){
+			printf("DATE_ERROR Channel:%d offset:%x in(HSI_in):%x out(HSI_out):%x\n" , \
+						(int)channel,i,pinBuf[(int)channel][i],poutBuf[(int)channel][i]);
+			goto exit;
+		}
+	}
+	printf("Channel %d LoopTest OK\n",(int)channel);
+exit:
+	SetEvent(hEvent[(int)channel]);
+}
+int 
+	loopback_test(
+	__in int times
+	)
+{
+
+	int    nBytesRead;
+	int    nBytesWrite;
+	int    ok;
+	int    retValue = 0;
+	UINT   success;
+	int 	loop;
+	int    ch;
+	HANDLE hDevice = INVALID_HANDLE_VALUE;
+	ULONG  fail = 0L;
+	ULONG  i;
+	REG_STRUCT m_reg[0x20];
+	unsigned char hw_reg[0x20];
+	int actual_bytes=0;
+	hDevice = Open_Device(TRUE);
+	loop_time = times;
+	success = DeviceIoControl(hDevice,
+				   IOCTL_MIPI_RESET,
+				   0,
+				   G_ReadLen,
+				   0,
+				   G_WriteLen,
+				   (PULONG) &nBytesRead,
+				   NULL);
+	if(success == 0) {
+			   printf("DeviceIoControl failed - error %d\n", GetLastError());
+			   retValue = 1;
+			   goto exit;
+		   }
+	m_reg[0].loc   = 0x0;
+	m_reg[0].pos   = 0x0;
+	m_reg[0].width = 0x3;
+	m_reg[0].value = 0x4;
+
+	m_reg[1].loc   = 0x1;
+	m_reg[1].pos   = 0x0;
+	m_reg[1].width = 0x3;
+	m_reg[1].value = 0x4;
+
+	m_reg[2].loc   = 0x3;
+	m_reg[2].pos   = 0x0;
+	m_reg[2].width = 0x8;
+	m_reg[2].value = 0x0;
+	Set_Register(hDevice,m_reg,3);
+
+	m_reg[0].loc   = 0x0;
+	m_reg[0].pos   = 0x0;
+	m_reg[0].width = 0x3;
+
+	m_reg[1].loc   = 0x1;
+	m_reg[1].pos   = 0x0;
+	m_reg[1].width = 0x3;
+
+	m_reg[2].loc   = 0x3;
+	m_reg[2].pos   = 0x0;
+	m_reg[2].width = 0x8;
+	actual_bytes = 3;
+
+
+	Get_Register(hDevice,m_reg,hw_reg,&actual_bytes);	
+	
+	Dump_Register(hDevice,hw_reg,&actual_bytes);
+	
+	memset(pinBuf,0,sizeof(pinBuf));
+	for (ch=0; ch<16; ++ch)
+	{
+		for (i=0; i<LOOP_LENGTH; ++i)
+			poutBuf[ch][i] = (i+1) + ((ch+1)<<16);
+			
+		hEvent[ch] = CreateEvent(NULL,FALSE ,FALSE,NULL);
+	}
+	Start_Recieve(hDevice);
+	for (ch=0; ch<16; ++ch){
+		_beginthread(Thread_loop_Revice,0,ch);
+	}
+	for (loop=0; loop<loop_time; ++loop){
+		for (ch=0; ch<16; ++ch)
+		{
+			Send_Data(hDevice,ch,(unsigned char*)(poutBuf[ch]),LOOP_LENGTH*4);	
+			Sleep(10);		
+		}	
+	}
+
+	for (ch=0; ch<16; ++ch){
+		WaitForSingleObject(hEvent[ch],INFINITE);
+	}
+
+exit:
+		// close devices if needed
+		Close_Device(hDevice);
+		return retValue;
+}
+
+

@@ -1,0 +1,121 @@
+
+ 
+[Version] 
+Signature = "$Windows NT$" 
+Class=HSI_USB_Bridge
+ClassGUID={78A1C341-4539-11d3-B88D-00C04FAD5172}
+Provider=%CIT% 
+CatalogFile=wdf_usb.cat
+DriverVer=20/12/2010
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  Class installation
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[ClassInstall32]
+AddReg=ClassInstall32_AddReg				    ;;write registry
+CopyFiles=ClassInstall32_CopyFiles			;;copy the files
+
+[ClassInstall32_AddReg]
+HKR,,,,"HSI_USB_Bridge drivers"
+HKR,,Icon,,102
+
+[ClassInstall32_CopyFiles]	
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  standard INF sections
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[Manufacturer]                          ;;top level section for device install
+%MFGNAME%=DeviceList                    ;;the name of the section that contains
+                                        ;;the list of devices for %MFGNAME%
+[DestinationDirs]
+DefaultDestDir=10,System32\drivers      ;;%windir%\system32\drivers this is
+                                        ;;mandatory for WDM drivers.
+                                        
+ClassInstall32CopyFiles=11              ;;system32 on WinNT platforms. all files
+                                        ;;for the classinstall are copied to
+                                        ;;this folder by default.
+                                        
+[SourceDisksFiles]                      ;;identify the files that are to be
+                                        ;;copied during installation.
+wdf_usb.sys=1
+
+[SourceDisksNames]                      ;;identify the source disks for the
+                                        ;;files that are specified in the
+                                        ;;SourceDisksFiles section
+1=%INST_DISK_NAME%                      ;;we only have 1 installation disk.
+
+[DeviceList]                            ;;Specify the list of devices that are
+                                        ;;supported by our driver.
+%DEV_DESCRIPTION%=DriverInstall,USB\VID_04B4&PID_8613
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  device installation
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+[DriverInstall.ntx86]                   ;;specify that this is the installation
+                                        ;;for nt based systems. if no postfix is
+                                        ;;specified, it is assumed that the
+                                        ;;driver is installed on 9x
+DriverVer=27/12/2005,1.0.0.1            ;;driver version
+CopyFiles=DriverCopyFiles               ;;specify the section that tells the
+                                        ;;installer which files to copy.
+
+[DriverCopyFiles]
+wdf_usb.sys                        ;;copy hello.sys
+
+[DriverInstall.ntx86.Services]
+AddService=wdf_usb,2,DriverService      ;;tell the PNP manager which files to
+                                        ;;load
+
+[DriverService]
+ServiceType=1                           ;;kernel mode driver
+StartType=3                             ;;start on demand
+ErrorControl=1                          ;;normal error handling. the device is
+                                        ;;not critical for the system.
+ServiceBinary=%10%\system32\drivers\wdf_usb.sys
+                                        ;;tell the system where the driver file
+                                        ;;is located.
+
+[DriverInstall.ntx86.hw]
+AddReg=DriverHwAddReg
+
+[DriverHwAddReg]
+HKR,,SampleInfo,,"%WDF_USB registry key"
+
+;-------------- WDF Coinstaller installation
+
+[DestinationDirs]
+CoInstaller_CopyFiles = 11
+
+[DriverInstall.ntx86.CoInstallers]
+AddReg=CoInstaller_AddReg
+CopyFiles=CoInstaller_CopyFiles
+
+[CoInstaller_CopyFiles]
+WdfCoInstaller01009_chk.dll
+
+[SourceDisksFiles]
+WdfCoInstaller01009_chk.dll=1 ; make sure the number matches with SourceDisksNames
+
+[CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoinstaller01000.dll,WdfCoInstaller"
+
+[DriverInstall.ntx86.Wdf]
+KmdfService = wdf_usb, wdf_usb_wdfsect
+
+[wdf_usb_wdfsect]
+KmdfLibraryVersion = 1.0
+
+;---------------------------------------------------------------;
+
+
+
+
+[Strings]
+BRUNO="HSI_USB_Bridge"
+MFGNAME="Sun"
+INSTDISK=" Installation Disc"
+DEV_DESCRIPTION="MIPI_HSI_USB_Bridge Device"
+INST_DISK_NAME="WDF USB device driver installation disk"

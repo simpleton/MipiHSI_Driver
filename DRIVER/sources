@@ -1,0 +1,16 @@
+TARGETNAME=wdf_usb
+TARGETTYPE=DRIVER
+
+MSC_WARNING_LEVEL=/W4
+
+INCLUDES = .\
+
+NO_BINPLACE=1
+
+KMDF_VERSION=1
+
+SOURCES=driver.c device.c queue.c hsi_usb_hw.c \
+				hsi_firmware.c hsi_usb_config.c 
+
+TARGET_DESTINATION=wdf
+

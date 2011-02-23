@@ -1,0 +1,278 @@
+BUILD: Computing Include file dependencies:
+BUILD: Examining c:\users\administrator\desktop\v0.2mipi_driver directory for files to compile.
+oacr invalidate root:x86chk /autocleanqueue
+1>Compiling and Linking c:\users\administrator\desktop\v0.2mipi_driver *************
+1>'nmake.exe /nologo BUILDMSG=Stop. -i BUILD_PASS=PASS2 LINKONLY=1 NOPASS0=1 MAKEDIR_RELATIVE_TO_BASEDIR='
+1>BUILDMSG: _NT_TARGET_VERSION SET TO WINXP
+1>warning : The directive KMDF_VERSION has been replaced by KMDF_VERSION_MAJOR and will be removed in the next version of the WDK. Please update your scripts accordingly.
+1>warnings in directory c:\users\administrator\desktop\v0.2mipi_driver
+1>c:\users\administrator\desktop\v0.2mipi_driver\warning : warning The directive KMDF_VERSION has been replaced by KMDF_VERSION_MAJOR and will be removed in the next version of the WDK. Please update your scripts accordingly.
+1> C:\WinDDK\7600.16385.1\Bin\x86\oacr\oacrcl @c:\users\administrator\desktop\v0.2mipi_driver\objchk_wxp_x86\i386\cl.rsp
+1>Microsoft (R) 32-bit C/C++ Optimizing Compiler Version 15.00.30729.207 for 80x86
+1>Copyright (C) Microsoft Corporation.  All rights reserved.
+1>cl /Fo"c:\users\administrator\desktop\v0.2mipi_driver\objchk_wxp_x86\i386/"
+1> /FC
+1> /Ii386
+1> /I.
+1> /I.
+1> /Ic:\users\administrator\desktop\v0.2mipi_driver\objchk_wxp_x86\i386
+1> /IC:\WinDDK\7600.16385.1\inc\api
+1> /IC:\WinDDK\7600.16385.1\inc\api
+1> /IC:\WinDDK\7600.16385.1\inc\ddk
+1> /IC:\WinDDK\7600.16385.1\inc\ddk
+1> /IC:\WinDDK\7600.16385.1\inc\wdf\kmdf\1.9
+1> /IC:\WinDDK\7600.16385.1\inc\crt
+1> /D_X86_=1
+1> /Di386=1
+1> /DSTD_CALL
+1> /DCONDITION_HANDLING=1
+1> /DNT_UP=1
+1> /DNT_INST=0
+1> /DWIN32=100
+1> /D_NT1X_=100
+1> /DWINNT=1
+1> /D_WIN32_WINNT=0x0501
+1> /DWINVER=0x0501
+1> /D_WIN32_IE=0x0603
+1> /DWIN32_LEAN_AND_MEAN=1
+1> /DDEVL=1
+1> /DDBG=1
+1> /D__BUILDMACHINE__=WinDDK
+1> /DFPO=0
+1> /D_DLL=1
+1> /DNDEBUG
+1> /DDEPRECATE_DDK_FUNCTIONS=1
+1> /DMSC_NOOPT
+1> /DNTDDI_VERSION=0x05010200
+1> /c
+1> /Zc:wchar_t-
+1> /Zl
+1> /Zp8
+1> /Gy
+1> /Gm-
+1> -cbstring
+1> /W4
+1> /Gz
+1> /hotpatch
+1> /EHs-c-
+1> /GR-
+1> /GF
+1> /GS
+1> /Zi
+1> /Od
+1> /Oi
+1> /Oy-
+1> /Zi
+1> /Fdc:\users\administrator\desktop\v0.2mipi_driver\objchk_wxp_x86\i386\
+1> /DKMDF_MAJOR_VERSION=1
+1> /DKMDF_MINOR_VERSION=9
+1> /DKMDF_MAJOR_VERSION_STRING=01
+1> /DKMDF_MINOR_VERSION_STRING=009
+1> /wd4603
+1> /wd4627
+1> /typedil-
+1> /FIC:\WinDDK\7600.16385.1\inc\api\warning.h
+1> .\driver.c .\device.c .\queue.c .\hsi_usb_hw.c .\hsi_firmware.c .\hsi_usb_config.c 
+1>driver.c
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.h(135) : warning C4115: 'usb_hw_fifo' : named type definition in parentheses
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.h(135) : warning C4115: 'usb_hw_fifo' : named type definition in parentheses
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(60) : warning C4005: 'ExFreePool' : macro redefinition
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(60) : warning C4005: 'ExFreePool' : macro redefinition
+1> c:\winddk\7600.16385.1\inc\ddk\ntddk.h(8617) : see previous definition of 'ExFreePool'
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(86) : warning C4005: 'min' : macro redefinition
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(86) : warning C4005: 'min' : macro redefinition
+1> c:\winddk\7600.16385.1\inc\api\ntdef.h(2667) : see previous definition of 'min'
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(87) : warning C4005: 'max' : macro redefinition
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(87) : warning C4005: 'max' : macro redefinition
+1> c:\winddk\7600.16385.1\inc\api\ntdef.h(2671) : see previous definition of 'max'
+1>device.c
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.h(135) : warning C4115: 'usb_hw_fifo' : named type definition in parentheses
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.h(135) : warning C4115: 'usb_hw_fifo' : named type definition in parentheses
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(60) : warning C4005: 'ExFreePool' : macro redefinition
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(60) : warning C4005: 'ExFreePool' : macro redefinition
+1> c:\winddk\7600.16385.1\inc\ddk\ntddk.h(8617) : see previous definition of 'ExFreePool'
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(86) : warning C4005: 'min' : macro redefinition
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(86) : warning C4005: 'min' : macro redefinition
+1> c:\winddk\7600.16385.1\inc\api\ntdef.h(2667) : see previous definition of 'min'
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(87) : warning C4005: 'max' : macro redefinition
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(87) : warning C4005: 'max' : macro redefinition
+1> c:\winddk\7600.16385.1\inc\api\ntdef.h(2671) : see previous definition of 'max'
+1>c:\winddk\7600.16385.1\inc\crt\stdlib.h(789) : warning C4005: 'max' : macro redefinition
+1>c:\winddk\7600.16385.1\inc\crt\stdlib.h(789) : warning C4005: 'max' : macro redefinition
+1> c:\users\administrator\desktop\v0.2mipi_driver\private.h(87) : see previous definition of 'max'
+1>c:\winddk\7600.16385.1\inc\crt\stdlib.h(790) : warning C4005: 'min' : macro redefinition
+1>c:\winddk\7600.16385.1\inc\crt\stdlib.h(790) : warning C4005: 'min' : macro redefinition
+1> c:\users\administrator\desktop\v0.2mipi_driver\private.h(86) : see previous definition of 'min'
+1>c:\users\administrator\desktop\v0.2mipi_driver\device.c(69) : warning C4101: 'requestAttributes' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\device.c(69) : warning C4101: 'requestAttributes' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\device.c(65) : warning C4101: 'fileConfig' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\device.c(65) : warning C4101: 'fileConfig' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\device.c(70) : warning C4101: 'queueAttributes' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\device.c(70) : warning C4101: 'queueAttributes' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\device.c(68) : warning C4101: 'fileObjectAttributes' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\device.c(68) : warning C4101: 'fileObjectAttributes' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\device.c(552) : warning C4242: 'function' : conversion from 'int' to 'UCHAR', possible loss of data
+1>c:\users\administrator\desktop\v0.2mipi_driver\device.c(552) : warning C4242: 'function' : conversion from 'int' to 'UCHAR', possible loss of data
+1>queue.c
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.h(135) : warning C4115: 'usb_hw_fifo' : named type definition in parentheses
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.h(135) : warning C4115: 'usb_hw_fifo' : named type definition in parentheses
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(60) : warning C4005: 'ExFreePool' : macro redefinition
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(60) : warning C4005: 'ExFreePool' : macro redefinition
+1> c:\winddk\7600.16385.1\inc\ddk\ntddk.h(8617) : see previous definition of 'ExFreePool'
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(86) : warning C4005: 'min' : macro redefinition
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(86) : warning C4005: 'min' : macro redefinition
+1> c:\winddk\7600.16385.1\inc\api\ntdef.h(2667) : see previous definition of 'min'
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(87) : warning C4005: 'max' : macro redefinition
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(87) : warning C4005: 'max' : macro redefinition
+1> c:\winddk\7600.16385.1\inc\api\ntdef.h(2671) : see previous definition of 'max'
+1>c:\users\administrator\desktop\v0.2mipi_driver\queue.c(104) : warning C4020: 'WdfRequestCompleteWithInformation' : too many actual parameters
+1>c:\users\administrator\desktop\v0.2mipi_driver\queue.c(104) : warning C4020: 'WdfRequestCompleteWithInformation' : too many actual parameters
+1>c:\users\administrator\desktop\v0.2mipi_driver\queue.c(75) : warning C4101: 'pFileContext' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\queue.c(75) : warning C4101: 'pFileContext' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\queue.c(72) : warning C4101: 'bufLength' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\queue.c(72) : warning C4101: 'bufLength' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\queue.c(71) : warning C4101: 'ioBuffer' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\queue.c(71) : warning C4101: 'ioBuffer' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\queue.c(348) : warning C4057: 'function' : 'size_t *' differs in indirection to slightly different base types from 'int *'
+1>c:\users\administrator\desktop\v0.2mipi_driver\queue.c(348) : warning C4057: 'function' : 'size_t *' differs in indirection to slightly different base types from 'int *'
+1>hsi_usb_hw.c
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.h(135) : warning C4115: 'usb_hw_fifo' : named type definition in parentheses
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.h(135) : warning C4115: 'usb_hw_fifo' : named type definition in parentheses
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(60) : warning C4005: 'ExFreePool' : macro redefinition
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(60) : warning C4005: 'ExFreePool' : macro redefinition
+1> c:\winddk\7600.16385.1\inc\ddk\ntddk.h(8617) : see previous definition of 'ExFreePool'
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(86) : warning C4005: 'min' : macro redefinition
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(86) : warning C4005: 'min' : macro redefinition
+1> c:\winddk\7600.16385.1\inc\api\ntdef.h(2667) : see previous definition of 'min'
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(87) : warning C4005: 'max' : macro redefinition
+1>c:\users\administrator\desktop\v0.2mipi_driver\private.h(87) : warning C4005: 'max' : macro redefinition
+1> c:\winddk\7600.16385.1\inc\api\ntdef.h(2671) : see previous definition of 'max'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(36) : warning C4244: '=' : conversion from 'int' to 'unsigned char', possible loss of data
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(36) : warning C4244: '=' : conversion from 'int' to 'unsigned char', possible loss of data
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(72) : warning C4242: 'function' : conversion from 'unsigned long' to 'USHORT', possible loss of data
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(72) : warning C4242: 'function' : conversion from 'unsigned long' to 'USHORT', possible loss of data
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(183) : warning C4057: 'function' : 'PULONG' differs in indirection to slightly different base types from 'int *'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(183) : warning C4057: 'function' : 'PULONG' differs in indirection to slightly different base types from 'int *'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(112) : warning C4101: 'err' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(112) : warning C4101: 'err' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(303) : warning C4057: 'function' : 'PULONG' differs in indirection to slightly different base types from 'int *'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(303) : warning C4057: 'function' : 'PULONG' differs in indirection to slightly different base types from 'int *'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(476) : warning C4090: 'function' : different 'const' qualifiers
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(476) : warning C4090: 'function' : different 'const' qualifiers
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(482) : warning C4127: conditional expression is constant
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(482) : warning C4127: conditional expression is constant
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(485) : warning C4057: 'function' : 'unsigned char *' differs in indirection to slightly different base types from 'char [512]'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(485) : warning C4057: 'function' : 'unsigned char *' differs in indirection to slightly different base types from 'char [512]'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(492) : warning C4057: 'function' : 'unsigned char *' differs in indirection to slightly different base types from 'char [512]'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(492) : warning C4057: 'function' : 'unsigned char *' differs in indirection to slightly different base types from 'char [512]'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(508) : warning C4057: 'function' : 'unsigned char *' differs in indirection to slightly different base types from 'char [512]'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(508) : warning C4057: 'function' : 'unsigned char *' differs in indirection to slightly different base types from 'char [512]'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(515) : warning C4057: 'function' : 'unsigned char *' differs in indirection to slightly different base types from 'char [512]'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(515) : warning C4057: 'function' : 'unsigned char *' differs in indirection to slightly different base types from 'char [512]'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(539) : warning C4057: 'function' : 'unsigned char *' differs in indirection to slightly different base types from 'char [512]'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(539) : warning C4057: 'function' : 'unsigned char *' differs in indirection to slightly different base types from 'char [512]'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(542) : warning C4057: 'function' : 'unsigned char *' differs in indirection to slightly different base types from 'char [512]'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(542) : warning C4057: 'function' : 'unsigned char *' differs in indirection to slightly different base types from 'char [512]'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(546) : warning C4127: conditional expression is constant
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(546) : warning C4127: conditional expression is constant
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(578) : warning C4100: 'endpoint' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(578) : warning C4100: 'endpoint' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(578) : warning C4100: 'device' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(578) : warning C4100: 'device' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(582) : warning C4101: 'buf' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(582) : warning C4101: 'buf' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(581) : warning C4101: 'err' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(581) : warning C4101: 'err' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(598) : warning C4100: 'fifo' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(598) : warning C4100: 'fifo' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(598) : warning C4100: 'device' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(598) : warning C4100: 'device' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(602) : warning C4101: 'i' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(602) : warning C4101: 'i' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(603) : warning C4101: 'buf' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(603) : warning C4101: 'buf' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(601) : warning C4101: 'err' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(601) : warning C4101: 'err' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(679) : warning C4100: 'count' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(679) : warning C4100: 'count' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(679) : warning C4100: 'start_addr' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(679) : warning C4100: 'start_addr' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(679) : warning C4100: 'device' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(679) : warning C4100: 'device' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(684) : warning C4101: 'loc_buf' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(684) : warning C4101: 'loc_buf' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(683) : warning C4101: 'retval' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(683) : warning C4101: 'retval' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(682) : warning C4101: 'bytes' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(682) : warning C4101: 'bytes' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(729) : warning C4244: '=' : conversion from 'int' to 'unsigned char', possible loss of data
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(729) : warning C4244: '=' : conversion from 'int' to 'unsigned char', possible loss of data
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(730) : warning C4242: '=' : conversion from 'int' to 'unsigned char', possible loss of data
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(730) : warning C4242: '=' : conversion from 'int' to 'unsigned char', possible loss of data
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(739) : warning C4133: 'function' : incompatible types - from 'PDEVICE_CONTEXT' to 'WDFDEVICE'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(739) : warning C4133: 'function' : incompatible types - from 'PDEVICE_CONTEXT' to 'WDFDEVICE'
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(757) : warning C4102: 'Exit' : unreferenced label
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(757) : warning C4102: 'Exit' : unreferenced label
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(712) : warning C4100: 'Request' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(712) : warning C4100: 'Request' : unreferenced formal parameter
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(722) : warning C4101: 'reqMemory' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(722) : warning C4101: 'reqMemory' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(723) : warning C4101: 'pipe' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(723) : warning C4101: 'pipe' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(724) : warning C4101: 'ret' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(724) : warning C4101: 'ret' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(716) : warning C4101: 'err' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(716) : warning C4101: 'err' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(844) : warning C4127: conditional expression is constant
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(844) : warning C4127: conditional expression is constant
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(817) : warning C4101: 'count' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(817) : warning C4101: 'count' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(816) : warning C4101: 'err' : unreferenced local variable
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_usb_hw.c(816) : warning C4101: 'err' : unreferenced local variable
+1>hsi_firmware.c
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_firmware.c(9807) : warning C4218: nonstandard extension used : must specify at least a storage class or a type
+1>c:\users\administrator\desktop\v0.2mipi_driver\hsi_firmware.c(9807) : warning C4218: nonstandard extension used : must specify at least a storage class or a type
+1>hsi_usb_config.c
+1>Generating Code...
+1>c:\users\administrator\desktop\v0.2mipi_driver\queue.c(104) : warning C4701: potentially uninitialized local variable 'status' used
+1>c:\users\administrator\desktop\v0.2mipi_driver\queue.c(104) : warning C4701: potentially uninitialized local variable 'status' used
+1> C:\WinDDK\7600.16385.1\Bin\x86\oacr\oacrlink /out:c:\users\administrator\desktop\v0.2mipi_driver\objchk_wxp_x86\i386\wdf_usb.sys /machine:ix86 @c:\users\administrator\desktop\v0.2mipi_driver\objchk_wxp_x86\i386\lnk.rsp
+1>Microsoft (R) Incremental Linker Version 9.00.30729.207
+1>Copyright (C) Microsoft Corporation.  All rights reserved.
+1>/MERGE:_PAGE=PAGE 
+1>/MERGE:_TEXT=.text 
+1>/SECTION:INIT,d 
+1>/OPT:REF 
+1>/OPT:ICF 
+1>/IGNORE:4198,4010,4037,4039,4065,4070,4078,4087,4089,4221 
+1>/INCREMENTAL:NO 
+1>/release 
+1>/NODEFAULTLIB 
+1>/WX 
+1>/debug 
+1>/debugtype:cv,fixup,pdata 
+1>/version:6.1 
+1>/osversion:6.1 
+1>/functionpadmin:5 
+1>/safeseh 
+1>/pdbcompress 
+1>/STACK:0x40000,0x1000 
+1>/driver 
+1>/base:0x10000 
+1>/align:0x80 /stub:c:\winddk\7600.16385.1\lib\wxp\stub512.com 
+1>/subsystem:native,5.01 
+1>/entry:FxDriverEntry@8 
+1>/out:c:\users\administrator\desktop\v0.2mipi_driver\objchk_wxp_x86\i386\wdf_usb.sys 
+1>c:\users\administrator\desktop\v0.2mipi_driver\objchk_wxp_x86\i386\driver.obj 
+1>c:\users\administrator\desktop\v0.2mipi_driver\objchk_wxp_x86\i386\device.obj 
+1>c:\users\administrator\desktop\v0.2mipi_driver\objchk_wxp_x86\i386\queue.obj 
+1>c:\users\administrator\desktop\v0.2mipi_driver\objchk_wxp_x86\i386\hsi_usb_hw.obj 
+1>c:\users\administrator\desktop\v0.2mipi_driver\objchk_wxp_x86\i386\hsi_firmware.obj 
+1>c:\users\administrator\desktop\v0.2mipi_driver\objchk_wxp_x86\i386\hsi_usb_config.obj 
+1>c:\winddk\7600.16385.1\lib\wxp\i386\BufferOverflowK.lib 
+1>c:\winddk\7600.16385.1\lib\wxp\i386\ntoskrnl.lib 
+1>c:\winddk\7600.16385.1\lib\wxp\i386\hal.lib 
+1>c:\winddk\7600.16385.1\lib\wxp\i386\wmilib.lib 
+1>C:\WinDDK\7600.16385.1\lib\wdf\kmdf\i386\1.9\WdfLdr.lib 
+1>C:\WinDDK\7600.16385.1\lib\wdf\kmdf\i386\1.9\WdfDriverEntry.lib 
+1>c:\winddk\7600.16385.1\lib\wxp\i386\sehupd.lib 

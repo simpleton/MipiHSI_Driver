@@ -1,0 +1,11 @@
+#ifndef __HSI_TX_H__
+#define __HSI_TX_H__
+
+static int init_tx(struct hsi_hw_dev *);
+static ssize_t send_tx_frames(struct hsi_ch_dev *, size_t, 
+                              hsi_frame_t *, int *actual_frames);
+static void tx_complete(HSI_USB_CALLBACK_PARA);
+
+
+#endif // __HSI_TX_H__
+

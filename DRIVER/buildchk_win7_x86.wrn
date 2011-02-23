@@ -1,0 +1,2 @@
+1>warnings in directory c:\users\sunsheng\desktop\v0.3mipi_driver
+1>c:\users\sunsheng\desktop\v0.3mipi_driver\warning : warning The directive KMDF_VERSION has been replaced by KMDF_VERSION_MAJOR and will be removed in the next version of the WDK. Please update your scripts accordingly.

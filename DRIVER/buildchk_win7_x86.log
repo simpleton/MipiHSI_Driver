@@ -1,0 +1,8 @@
+BUILD: Computing Include file dependencies:
+BUILD: Examining c:\users\sunsheng\desktop\v0.3mipi_driver directory for files to compile.
+oacr invalidate root:x86chk /autocleanqueue
+1>Compiling and Linking c:\users\sunsheng\desktop\v0.3mipi_driver *************
+1>'nmake.exe /nologo BUILDMSG=Stop. -i BUILD_PASS=PASS2 LINKONLY=1 NOPASS0=1 MAKEDIR_RELATIVE_TO_BASEDIR='
+1>warning : The directive KMDF_VERSION has been replaced by KMDF_VERSION_MAJOR and will be removed in the next version of the WDK. Please update your scripts accordingly.
+1>warnings in directory c:\users\sunsheng\desktop\v0.3mipi_driver
+1>c:\users\sunsheng\desktop\v0.3mipi_driver\warning : warning The directive KMDF_VERSION has been replaced by KMDF_VERSION_MAJOR and will be removed in the next version of the WDK. Please update your scripts accordingly.
